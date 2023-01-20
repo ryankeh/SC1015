@@ -40,7 +40,6 @@ hp.describe()
 #check the Summary Statistics visually using a standard boxplot.
 f = plt.figure(figsize=(24, 4))
 sb.boxplot(data = hp, orient = "h")
-
 #Extend the summary to visualize the complete distribution of the Series.
 #The first visualization is a simple Histogram with automatic bin sizes.
 #Bar Graph
@@ -50,3 +49,40 @@ sb.histplot(data = hp)
 #Line Graph
 f = plt.figure(figsize=(16, 8))
 sb.kdeplot(data = hp)
+#Combination of both
+f = plt.figure(figsize=(16, 8))
+sb.histplot(data = hp, kde = True)
+#Violin Plot combines boxplot with kernel density estimate.
+f = plt.figure(figsize=(16, 8))
+sb.violinplot(data = hp, orient = "h")
+
+
+#Extract 2 variables
+#analyze two variables from the dataset, HP vs Attack. Extract the two variables and their associated data as a Pandas DataFrame.
+hp = pd.DataFrame(pkmndata['HP'])
+attack = pd.DataFrame(pkmndata['Attack'])
+#check the uni-variate Summary Statistics for each variable.
+hp.describe()
+attack.describe()
+
+#Visualize the uni-variate Distributions of each variable independently.
+#Set up matplotlib figure with three subplots
+f, axes = plt.subplots(2, 3, figsize=(24, 12))
+# Plot the basic uni-variate figures for HP
+sb.boxplot(data = hp, orient = "h", ax = axes[0,0])
+sb.histplot(data = hp, ax = axes[0,1])
+sb.violinplot(data = hp, orient = "h", ax = axes[0,2])
+#Plot the basic uni-variate figures for Attack
+sb.boxplot(data = attack, orient = "h", ax = axes[1,0])
+sb.histplot(data = attack, ax = axes[1,1])
+sb.violinplot(data = attack, orient = "h", ax = axes[1,2])
+
+#Create a joint dataframe by concatenating the two variables
+jointDF = pd.concat([attack, hp], axis = 1).reindex(attack.index)
+jointDF
+#Draw jointplot of the two variables in the joined dataframe
+sb.jointplot(data = jointDF, x = "Attack", y = "HP", height = 12)
+# Calculate the correlation between the two columns/variables
+jointDF.corr()
+#Visualize the correlation matrix as a heatmap to gain a better insight.
+sb.heatmap(jointDF.corr(), vmin = -1, vmax = 1, annot = True, fmt=".2f")
