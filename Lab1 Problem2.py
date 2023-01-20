@@ -57,7 +57,8 @@ f = plt.figure(figsize=(16, 8))
 sb.violinplot(data = hp, orient = "h")
 
 
-#Extract 2 variables
+#Bi-variate variables
+
 #analyze two variables from the dataset, HP vs Attack. Extract the two variables and their associated data as a Pandas DataFrame.
 hp = pd.DataFrame(pkmndata['HP'])
 attack = pd.DataFrame(pkmndata['Attack'])
@@ -82,7 +83,35 @@ jointDF = pd.concat([attack, hp], axis = 1).reindex(attack.index)
 jointDF
 #Draw jointplot of the two variables in the joined dataframe
 sb.jointplot(data = jointDF, x = "Attack", y = "HP", height = 12)
-# Calculate the correlation between the two columns/variables
+#Calculate the correlation between the two columns/variables
 jointDF.corr()
 #Visualize the correlation matrix as a heatmap to gain a better insight.
 sb.heatmap(jointDF.corr(), vmin = -1, vmax = 1, annot = True, fmt=".2f")
+
+
+#Multi-variate Statistics
+
+#Extract only the numeric data variables
+numDF = pd.DataFrame(pkmndata[["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]])
+#Summary Statistics for all Variables
+numDF.describe()
+#Draw the Boxplots of all variables
+f = plt.figure(figsize=(16, 8))
+sb.boxplot(data = numDF, orient = "h")
+
+#Draw the distributions of all variables
+f, axes = plt.subplots(6, 3, figsize=(18, 24))
+count = 0
+for var in numDF:
+    sb.boxplot(data = numDF[var], orient = "h", ax = axes[count,0])
+    sb.histplot(data = numDF[var], ax = axes[count,1])
+    sb.violinplot(data = numDF[var], orient = "h", ax = axes[count,2])
+    count += 1
+    
+#Calculate the complete  correlation matrix
+numDF.corr()
+#Heatmap of the Correlation Matrix
+f = plt.figure(figsize=(12, 12))
+sb.heatmap(numDF.corr(), vmin = -1, vmax = 1, annot = True, fmt = ".2f")
+#Draw pairs of variables against one another
+sb.pairplot(data = numDF)
