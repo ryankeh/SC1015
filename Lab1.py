@@ -33,6 +33,12 @@ print("Data type : ", type(csv_data))
 #gives dimensions of the data, how many observations (rows) and variables (columns)
 print("Data dims : ", csv_data.shape)
 
+#gives information regarding the dataframe
+#information contains the number of columns, column labels, column data types, memory usage, range index, and the number of cells in each column (non-null values)
+csv_data.info()
+#returns description of the data in the DataFrame.
+#if the DataFrame contains numerical data, the description contains these information for each column
+csv_data.describe()
 
 
 
